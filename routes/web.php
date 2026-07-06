@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\OrganizationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,11 +18,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-use App\Http\Controllers\OrganizationController;
-
+// Organization Registration Routes
 Route::get('/organization/register', [OrganizationController::class, 'create'])
     ->name('organization.register');
 
 Route::post('/organization/register', [OrganizationController::class, 'store'])
     ->name('organization.store');
+    Route::get('/organization/success', [OrganizationController::class, 'success'])
+    ->name('organization.success');
+
+require __DIR__.'/auth.php';

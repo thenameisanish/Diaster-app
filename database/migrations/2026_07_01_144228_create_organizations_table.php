@@ -13,59 +13,95 @@ return new class extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
 
-    $table->id();
+            $table->id();
 
-    $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            // User Account
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
-    $table->string('organization_name');
+            // Basic Information
+            $table->string('organization_name');
+            $table->string('registration_number')->unique();
 
-    $table->string('registration_number')->unique();
+            $table->enum('organization_type', [
+                'NGO',
+                'INGO',
+                'Government',
+                'Charity',
+                'Community',
+                'Other'
+            ]);
 
-    $table->enum('organization_type', [
-        'NGO',
-        'INGO',
-        'Government',
-        'Charity',
-        'Community',
-        'Other'
-    ]);
+            $table->integer('years_of_operation')->default(0);
 
-    $table->string('phone');
-    $table->string('website')->nullable();
+            $table->text('description')->nullable();
 
-    $table->text('address');
+            $table->string('logo')->nullable();
 
-    $table->string('district');
+            // Contact Information
+            $table->string('email')->unique();
 
-    $table->string('province');
+            $table->string('phone');
 
-    $table->string('representative_name');
+            $table->string('website')->nullable();
 
-    $table->string('representative_position');
+            $table->text('address');
 
-    $table->string('representative_phone');
+            $table->string('province');
 
-    $table->string('representative_email');
+            $table->string('district');
 
-    $table->string('registration_certificate');
+            // Representative Information
+            $table->string('representative_name');
 
-    $table->string('pan_certificate')->nullable();
+            $table->string('representative_position');
 
-    $table->string('representative_id');
+            $table->string('representative_phone');
 
-    $table->integer('capacity')->default(0);
+            $table->string('representative_email');
 
-    $table->enum('status', [
-        'Pending',
-        'Approved',
-        'Rejected'
-    ])->default('Pending');
+            // Documents
+            $table->string('registration_certificate');
 
-    $table->text('rejection_reason')->nullable();
+            $table->string('pan_certificate')->nullable();
 
-    $table->timestamps();
-});
-    
+            $table->string('representative_id');
+
+            // Resources They Can Provide
+            $table->boolean('food')->default(false);
+
+            $table->boolean('water')->default(false);
+
+            $table->boolean('medicine')->default(false);
+
+            $table->boolean('shelter')->default(false);
+
+            $table->boolean('clothes')->default(false);
+
+            $table->boolean('rescue_equipment')->default(false);
+
+            $table->boolean('transportation')->default(false);
+
+            // Organization Capacity
+            $table->integer('capacity')->default(0);
+
+            // Approval
+            $table->enum('status', [
+                'Pending',
+                'Approved',
+                'Rejected'
+            ])->default('Pending');
+
+            $table->text('rejection_reason')->nullable();
+
+            $table->timestamp('approved_at')->nullable();
+
+            $table->foreignId('approved_by')
+                  ->nullable()
+                  ->constrained('users')
+                  ->nullOnDelete();
+
+            $table->timestamps();
+        });
     }
 
     /**

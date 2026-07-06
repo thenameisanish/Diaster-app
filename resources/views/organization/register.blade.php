@@ -1,110 +1,208 @@
 @extends('layouts.app')
 
-@section('title','Organization Registration')
+@section('title', 'Organization Registration')
 
 @section('content')
 
-<div class="row justify-content-center">
+<div class="container">
 
-<div class="col-lg-9">
+    <div class="row justify-content-center">
 
-<div class="card shadow">
+        <div class="col-lg-10">
 
-<div class="card-header bg-primary text-white">
+            <div class="card shadow border-0">
 
-<h3 class="mb-0">
-Organization Registration
-</h3>
+                <div class="card-body p-5">
 
-</div>
+                    <h2 class="text-center fw-bold mb-3">
+                        Organization Registration
+                    </h2>
 
-<div class="card-body">
+                    <p class="text-center text-muted">
+                        Step 1 of 5 - Basic Information
+                    </p>
 
-<form method="POST"
-      action="{{ route('organization.store') }}"
-      enctype="multipart/form-data">
+                    <div class="progress mb-5" style="height:12px;">
 
-@csrf
+                        <div class="progress-bar bg-success"
+                             role="progressbar"
+                             style="width:20%">
+                        </div>
 
-<h5 class="mb-3">
-Basic Information
-</h5>
+                    </div>
 
-<div class="row">
+                    @if ($errors->any())
 
-<div class="col-md-6 mb-3">
+                        <div class="alert alert-danger">
 
-<label class="form-label">
-Organization Name
-</label>
+                            <ul class="mb-0">
 
-<input
-type="text"
-name="organization_name"
-class="form-control"
-required>
+                                @foreach($errors->all() as $error)
 
-</div>
+                                    <li>{{ $error }}</li>
 
-<div class="col-md-6 mb-3">
+                                @endforeach
 
-<label class="form-label">
-Registration Number
-</label>
+                            </ul>
 
-<input
-type="text"
-name="registration_number"
-class="form-control"
-required>
+                        </div>
 
-</div>
+                    @endif
 
-</div>
+                    <form method="POST"
+                          action="{{ route('organization.store') }}"
+                          enctype="multipart/form-data">
 
-<div class="mb-3">
+                        @csrf
 
-<label class="form-label">
-Organization Type
-</label>
+                        <div class="row">
 
-<select
-name="organization_type"
-class="form-select"
-required>
+                            <div class="col-md-6 mb-4">
 
-<option value="">Choose...</option>
+                                <label class="form-label fw-bold">
 
-<option>NGO</option>
+                                    <i class="bi bi-building"></i>
 
-<option>INGO</option>
+                                    Organization Name
 
-<option>Government</option>
+                                </label>
 
-<option>Charity</option>
+                                <input
+                                    type="text"
+                                    name="organization_name"
+                                    class="form-control"
+                                    value="{{ old('organization_name') }}"
+                                    required>
 
-<option>Community</option>
+                            </div>
 
-<option>Other</option>
+                            <div class="col-md-6 mb-4">
 
-</select>
+                                <label class="form-label fw-bold">
 
-</div>
+                                    <i class="bi bi-hash"></i>
 
-<button
-class="btn btn-primary">
+                                    Registration Number
 
-Continue
+                                </label>
 
-</button>
+                                <input
+                                    type="text"
+                                    name="registration_number"
+                                    class="form-control"
+                                    value="{{ old('registration_number') }}"
+                                    required>
 
-</form>
+                            </div>
 
-</div>
+                            <div class="col-md-6 mb-4">
 
-</div>
+                                <label class="form-label fw-bold">
 
-</div>
+                                    <i class="bi bi-diagram-3"></i>
+
+                                    Organization Type
+
+                                </label>
+
+                                <select
+                                    name="organization_type"
+                                    class="form-select"
+                                    required>
+
+                                    <option value="">
+                                        Select Type
+                                    </option>
+
+                                    <option>NGO</option>
+                                    <option>INGO</option>
+                                    <option>Government</option>
+                                    <option>Charity</option>
+                                    <option>Community</option>
+                                    <option>Other</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+
+                                <label class="form-label fw-bold">
+
+                                    <i class="bi bi-calendar"></i>
+
+                                    Years of Operation
+
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="years_of_operation"
+                                    class="form-control"
+                                    min="0"
+                                    value="{{ old('years_of_operation') }}"
+                                    required>
+
+                            </div>
+
+                            <div class="col-12 mb-4">
+
+                                <label class="form-label fw-bold">
+
+                                    <i class="bi bi-card-text"></i>
+
+                                    Organization Description
+
+                                </label>
+
+                                <textarea
+                                    name="description"
+                                    rows="5"
+                                    class="form-control">{{ old('description') }}</textarea>
+
+                            </div>
+
+                            <div class="col-12 mb-4">
+
+                                <label class="form-label fw-bold">
+
+                                    <i class="bi bi-image"></i>
+
+                                    Organization Logo
+
+                                </label>
+
+                                <input
+                                    type="file"
+                                    name="logo"
+                                    class="form-control">
+
+                            </div>
+
+                        </div>
+
+                        <div class="text-end">
+
+                            <button
+                                class="btn btn-primary btn-lg">
+
+                                Next
+
+                                <i class="bi bi-arrow-right"></i>
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 

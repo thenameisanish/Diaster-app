@@ -28,3 +28,11 @@ Route::post('/organization/register', [OrganizationController::class, 'store'])
     ->name('organization.success');
 
 require __DIR__.'/auth.php';
+use App\Http\Controllers\Admin\AdminController;
+
+Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
+        ->name('admin.dashboard');
+
+});

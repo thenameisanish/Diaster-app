@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\MailHelper;
 
 class AdminController extends Controller
 {
@@ -34,18 +35,22 @@ class AdminController extends Controller
         return view('admin.organizations.show', compact('organization'));
     }
 
-    public function approve(Organization $organization)
-    {
-        $organization->update([
-            'status' => 'Approved',
-            'approved_at' => now(),
-            'approved_by' => Auth::id(),
-            'rejection_reason' => null,
-        ]);
+ public function approve(Organization $organization)
+{
+    $organization->update([
+        'status' => 'Approved',
+        'approved_at' => now(),
+        'approved_by' => auth()->id(),
+        'rejection_reason' => null,
+    ]);
 
-        return redirect()->back()->with('success', 'Organization approved successfully.');
-    }
+    MailHelper::sendApprovalMail(
+        $organization->email,
+        $organization->organization_name
+    );
 
+    return back()->with('success', 'Organization approved and email sent successfully.');
+}
     public function reject(Request $request, Organization $organization)
     {
         $request->validate([
@@ -57,6 +62,11 @@ class AdminController extends Controller
             'approved_by' => Auth::id(),
             'rejection_reason' => $request->reason,
         ]);
+        MailHelper::sendApprovalMail(
+        $organization->email,
+        $organization->organization_name
+    );
+
 
         return redirect()->back()->with('success', 'Organization rejected successfully.');
     }
